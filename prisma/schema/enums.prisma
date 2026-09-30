@@ -1,0 +1,24 @@
+// 3 distinct roles for RBAC
+enum Role {
+  ADMIN
+  COURIER
+  CUSTOMER
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  DELETED
+}
+
+enum AuthProvider {
+  GOOGLE
+  CREDENTIAL
+}
+
+enum VehicleType {
+  BICYCLE
+  MOTORBIKE
+  VAN
+  TRUCK
+}

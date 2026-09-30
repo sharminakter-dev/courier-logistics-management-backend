@@ -1,0 +1,10 @@
+// Prisma multi-file schema. Models live in sibling *.prisma files.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}

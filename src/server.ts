@@ -1,0 +1,33 @@
+import type { Server } from "node:http";
+import app from "./app";
+import config from "./app/config";
+import { prisma } from "./app/lib/prisma";
+
+let server: Server;
+
+const shutdown = async (signal: string) => {
+	console.log(`${signal} received. Shutting down...`);
+	server?.close(async () => {
+		await prisma.$disconnect();
+		process.exit(0);
+	});
+};
+
+const main = async () => {
+	try {
+		await prisma.$connect();
+		console.log("Connected to the database successfully.");
+		server = app.listen(config.port, () => {
+			console.log(`Server is running on port ${config.port}`);
+		});
+	} catch (error) {
+		console.error("Error starting the server:", error);
+		await prisma.$disconnect();
+		process.exit(1);
+	}
+};
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
+
+main();
