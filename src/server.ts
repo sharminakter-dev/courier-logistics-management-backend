@@ -4,6 +4,7 @@ import config from "./app/config";
 import { prisma } from "./app/lib/prisma";
 import { runSeeders } from "./app/utils/seed";
 import { redisClient } from "./app/lib/redis";
+import { transporter } from "./app/lib/nodemailer";
 
 let server: Server;
 
@@ -21,7 +22,10 @@ const main = async () => {
 		console.log("Connected to the database successfully.");
 
 		await redisClient.connect();
-        console.log("Redis Connected Successfully")
+        console.log("Redis Connected Successfully");
+
+		await transporter.verify();
+        console.log("NodeMailer Connected Successfully")
 
 		await runSeeders(); // added
 

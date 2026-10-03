@@ -21,6 +21,9 @@ import type {
 } from "./auth.interface";
 import { redisClient } from "../../lib/redis";
 import crypto from "crypto";
+import { transporter } from "../../lib/nodemailer";
+import ejs from "ejs";
+import path from "path";
 
 type TTokenUser = {
 	id: string;
@@ -275,12 +278,14 @@ const forgotPassword = async(payload: IForgotPasswordPayload)=>{
 	}
 
 	if(isUserExist.authProvider !== "CREDENTIAL"){
-		throw new Error("User Has Accoubt With Google")
+		throw new Error("User Has Account With Google")
 	}
 
 	const otp = crypto.randomInt(100000,1000000).toString();
 
-	const key = `forget-password-otp:${isUserExist.email}`
+	const key = `forget-password-otp:${isUserExist.email}`;
+
+	const expirationSeconds =5 * 60
 
 	await redisClient.set(key, otp,{
 		expiration: {
@@ -288,6 +293,24 @@ const forgotPassword = async(payload: IForgotPasswordPayload)=>{
 			value: 5 * 60
 		}
 	})
+
+	const templatePath = path.join(process.cwd(), "src/app/templates/forgot-password.ejs")
+
+	const templateData = {
+		name: isUserExist.name,
+		otp,
+		expirationMinutes : expirationSeconds / 60
+	}
+
+	const html = await ejs.renderFile(templatePath, templateData)
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: isUserExist.email,
+		subject: "Forgot Password",
+		html: html
+	})
+
 
 }
 
@@ -344,6 +367,21 @@ const resetPassword = async(payload: IResetPasswordPayload)=>{
 	})
 
 	await redisClient.del(key);
+
+	const templatePath = path.join(process.cwd(), "src/app/templates/reset-password-success.ejs");
+
+	const templateData = {
+		name: isUserExist.name,
+	}
+
+	const html = await ejs.renderFile(templatePath, templateData);
+
+	await transporter.sendMail({
+		from: config.email_sender,
+		to: isUserExist.email,
+		subject: "Password Reset",
+		html: html
+	});
 	
 }
 
