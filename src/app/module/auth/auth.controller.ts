@@ -6,6 +6,8 @@ import { cookieUtils } from "../../utils/cookie";
 import { sendResponse } from "../../utils/sendResponse";
 import type { IRequestUser } from "./auth.interface";
 import { AuthService } from "./auth.service";
+import { redisClient } from "../../lib/redis";
+
 
 const registerCustomer = catchAsync(async (req: Request, res: Response) => {
 	const result = await AuthService.registerCustomer(req.body);
@@ -100,6 +102,37 @@ const logout = catchAsync(async (_req: Request, res: Response) => {
 	});
 });
 
+const forgotPassword =  catchAsync(async (req: Request, res: Response) =>{
+
+	const payload = req.body;
+
+	await AuthService.forgotPassword(payload);
+
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: `OTP Sent to Email : ${payload.email}`,
+		data: null
+	});
+})
+
+const resetPassword =  catchAsync(async (req: Request, res: Response) =>{
+	const payload = req.body;
+
+	const result = await AuthService.resetPassword(payload);
+	
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "Password Reset successfully",
+		data: {
+			
+		},
+	});
+})
+
+
+
 export const AuthController = {
 	registerCustomer,
 	loginUser,
@@ -107,4 +140,6 @@ export const AuthController = {
 	refreshToken,
 	googleLogin,
 	logout,
+	forgotPassword,
+	resetPassword
 };

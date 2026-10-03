@@ -47,9 +47,25 @@ const refreshToken = z.object({
 		.optional(),
 });
 
+const forgotPassword = z.object({
+	body: z.object({
+		email: z.string("Password is required"),
+	})
+})
+
+const resetPassword = z.object({
+	body: z.object({
+		password: z.string("Password is required").min(1, "Password is required"),
+		newPassword: passwordSchema,
+		otp: z.string("Otp is required")
+	})
+})
+
 export const AuthValidation = {
 	registerCustomer,
 	login,
 	googleLogin,
 	refreshToken,
+	forgotPassword,
+	resetPassword
 };

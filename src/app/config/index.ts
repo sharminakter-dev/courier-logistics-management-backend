@@ -51,4 +51,8 @@ export default {
 	tester_customer_name: process.env.TESTER_CUSTOMER_NAME,
 	tester_customer_email: process.env.TESTER_CUSTOMER_EMAIL,
 	tester_customer_password: process.env.TESTER_CUSTOMER_PASSWORD,
+	    redis_user: process.env.REDIS_USER,
+    redis_password: process.env.REDIS_PASSWORD,
+    redis_host: process.env.REDIS_HOST,
+    redis_port: process.env.REDIS_PORT,
 };
