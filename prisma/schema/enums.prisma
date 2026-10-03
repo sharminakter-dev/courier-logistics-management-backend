@@ -1,5 +1,6 @@
 // 3 distinct roles for RBAC
 enum Role {
+  SUPER_ADMIN
   ADMIN
   COURIER
   CUSTOMER

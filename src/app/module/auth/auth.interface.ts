@@ -10,6 +10,7 @@ export interface IRegisterCustomerPayload {
 	email: string;
 	password: string;
 	phone?: string;
+	address?: string;
 }
 
 export interface IRequestUser {

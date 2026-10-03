@@ -2,6 +2,7 @@ import type { Server } from "node:http";
 import app from "./app";
 import config from "./app/config";
 import { prisma } from "./app/lib/prisma";
+import { runSeeders } from "./app/utils/seed";
 
 let server: Server;
 
@@ -17,6 +18,9 @@ const main = async () => {
 	try {
 		await prisma.$connect();
 		console.log("Connected to the database successfully.");
+
+		await runSeeders(); // added
+
 		server = app.listen(config.port, () => {
 			console.log(`Server is running on port ${config.port}`);
 		});

@@ -63,7 +63,7 @@ const assertUserIsActive = (user: TStatusUser) => {
 };
 
 const registerCustomer = async (payload: IRegisterCustomerPayload) => {
-	const { name, password, phone } = payload;
+	const { name, password, phone, address } = payload;
 	const email = payload.email.trim().toLowerCase();
 
 	const existingUser = await prisma.user.findUnique({
@@ -91,7 +91,9 @@ const registerCustomer = async (payload: IRegisterCustomerPayload) => {
 			status: UserStatus.ACTIVE,
 			authProvider: AuthProvider.CREDENTIAL,
 			emailVerified: false,
-			customer: { create: {} },
+			customer: { create: {
+				address
+			} },
 		},
 		omit: { password: true },
 		include: { customer: true },

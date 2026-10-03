@@ -38,5 +38,17 @@ export default {
 	jwt_refresh_expires_in: process.env
 		.JWT_REFRESH_EXPIRES_IN as SignOptions["expiresIn"],
 	google_client_id: process.env.GOOGLE_CLIENT_ID as string,
-	google_client_secret: process.env.GOOGLE_CLIENT_SECRET as string
+	google_client_secret: process.env.GOOGLE_CLIENT_SECRET as string,
+	super_admin_name: process.env.SUPER_ADMIN_NAME,
+	super_admin_email: process.env.SUPER_ADMIN_EMAIL,
+	super_admin_password: process.env.SUPER_ADMIN_PASSWORD,
+	admin_name: process.env.ADMIN_NAME,
+	admin_email: process.env.ADMIN_EMAIL,
+	admin_password: process.env.ADMIN_PASSWORD,
+	tester_courier_name: process.env.TESTER_COURIER_NAME,
+	tester_courier_email: process.env.TESTER_COURIER_EMAIL,
+	tester_courier_password: process.env.TESTER_COURIER_PASSWORD,
+	tester_customer_name: process.env.TESTER_CUSTOMER_NAME,
+	tester_customer_email: process.env.TESTER_CUSTOMER_EMAIL,
+	tester_customer_password: process.env.TESTER_CUSTOMER_PASSWORD,
 };

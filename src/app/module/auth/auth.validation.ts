@@ -6,7 +6,8 @@ const passwordSchema = z
 	.max(64, "Password must be at most 64 characters")
 	.regex(/[a-z]/, "Password must contain a lowercase letter")
 	.regex(/[A-Z]/, "Password must contain an uppercase letter")
-	.regex(/[0-9]/, "Password must contain a number");
+	.regex(/[0-9]/, "Password must contain a number")
+	.regex(/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]';`~]/, "Password must contain a special characters");
 
 const registerCustomer = z.object({
 	body: z.object({

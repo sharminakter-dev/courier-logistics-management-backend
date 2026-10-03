@@ -19,7 +19,7 @@ router.post(
 );
 router.get(
 	"/me",
-	auth(Role.ADMIN, Role.COURIER, Role.CUSTOMER),
+	auth(Role.SUPER_ADMIN, Role.ADMIN, Role.COURIER, Role.CUSTOMER),
 	AuthController.getMe,
 );
 router.post(
