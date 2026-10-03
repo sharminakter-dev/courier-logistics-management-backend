@@ -55,9 +55,9 @@ const forgotPassword = z.object({
 
 const resetPassword = z.object({
 	body: z.object({
-		password: z.string("Password is required").min(1, "Password is required"),
+		email: z.string("Password is required"),
 		newPassword: passwordSchema,
-		otp: z.string("Otp is required")
+		otp: z.string("Otp is required").length(6)
 	})
 })
 

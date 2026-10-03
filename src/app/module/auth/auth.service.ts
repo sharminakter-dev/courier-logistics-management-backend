@@ -17,6 +17,7 @@ import type {
 	ILoginUserPayload,
 	IRegisterCustomerPayload,
 	IRequestUser,
+	IResetPasswordPayload,
 } from "./auth.interface";
 import { redisClient } from "../../lib/redis";
 import crypto from "crypto";
@@ -290,7 +291,59 @@ const forgotPassword = async(payload: IForgotPasswordPayload)=>{
 
 }
 
-const resetPassword = (payload: any)=>{
+const resetPassword = async(payload: IResetPasswordPayload)=>{
+	const {email, newPassword, otp} = payload
+
+	const isUserExist = await prisma.user.findUnique({
+		where:{
+			email
+		}
+	});
+
+	if(!isUserExist){
+		throw new Error("User Does not Exist")
+	}
+
+	if(!isUserExist.emailVerified){
+		throw new Error("User is not Verified")
+	}
+
+	if(isUserExist.status === "BLOCKED"){
+		throw new Error("User is Blocked")
+	}
+
+	if(isUserExist.isDeleted || isUserExist.status === "DELETED"){
+		throw new Error("User is Deleted")
+	}
+
+	if(isUserExist.authProvider !== "CREDENTIAL"){
+		throw new Error("User Has Accoubt With Google")
+	}
+
+	const key = `forget-password-otp:${isUserExist.email}`
+
+	const redisOtp = await redisClient.get(key)
+
+	if(!redisOtp){
+		throw new Error("Invalid OTP");
+	}
+
+	if(redisOtp !== otp){
+		throw new Error("OTP Does Not Match");
+	}
+
+	const hashedNewPassword = await bcrypt.hash(newPassword, Number(config.bcrypt_salt_rounds))
+
+	await prisma.user.update({
+		where:{
+			email: isUserExist.email
+		},
+		data:{
+			password: hashedNewPassword
+		}
+	})
+
+	await redisClient.del(key);
 	
 }
 
