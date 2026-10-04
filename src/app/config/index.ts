@@ -57,5 +57,8 @@ export default {
     redis_port: process.env.REDIS_PORT,
 	sptm_user: process.env.SMTP_USER,
     sptm_password: process.env.SMTP_PASSWORD,
-    email_sender: process.env.EMAIL_SENDER
+    email_sender: process.env.EMAIL_SENDER,
+	smtp_host: process.env.SMTP_HOST as string,
+	smtp_port: Number(process.env.SMTP_PORT ?? 587),
+	redis_url: process.env.REDIS_URL ?? "redis://localhost:6379",
 };

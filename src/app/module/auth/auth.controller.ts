@@ -11,6 +11,18 @@ import { redisClient } from "../../lib/redis";
 
 const registerCustomer = catchAsync(async (req: Request, res: Response) => {
 	const result = await AuthService.registerCustomer(req.body);
+
+
+	sendResponse(res, {
+		statusCode: httpStatus.CREATED,
+		success: true,
+		message: "Verification OTP sent to your email",
+		data: result,
+	});
+});
+
+const verifyEmail = catchAsync(async (req: Request, res: Response) => {
+	const result = await AuthService.verifyCustomerEmail(req.body);
 	const { accessToken, refreshToken, user, customer } = result;
 
 	cookieUtils.setAuthCookies(res, { accessToken, refreshToken });
@@ -18,7 +30,7 @@ const registerCustomer = catchAsync(async (req: Request, res: Response) => {
 	sendResponse(res, {
 		statusCode: httpStatus.CREATED,
 		success: true,
-		message: "Customer registered successfully",
+		message: "Email verified and customer registered successfully",
 		data: { accessToken, refreshToken, user, customer },
 	});
 });
@@ -133,6 +145,7 @@ const resetPassword =  catchAsync(async (req: Request, res: Response) =>{
 
 export const AuthController = {
 	registerCustomer,
+	verifyEmail,
 	loginUser,
 	getMe,
 	refreshToken,

@@ -12,6 +12,13 @@ router.post(
 	validateRequest(AuthValidation.registerCustomer),
 	AuthController.registerCustomer,
 );
+
+router.post(
+	"/verify-email",
+	validateRequest(AuthValidation.verifyEmail),
+	AuthController.verifyEmail,
+);
+
 router.post(
 	"/login",
 	validateRequest(AuthValidation.login),

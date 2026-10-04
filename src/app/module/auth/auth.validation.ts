@@ -61,8 +61,16 @@ const resetPassword = z.object({
 	})
 })
 
+const verifyEmail = z.object({
+	body: z.object({
+		email: z.email("Please provide a valid email address"),
+		otp: z.string("OTP is required").regex(/^\d{6}$/, "OTP must be 6 digits"),
+	}),
+});
+
 export const AuthValidation = {
 	registerCustomer,
+	verifyEmail,
 	login,
 	googleLogin,
 	refreshToken,

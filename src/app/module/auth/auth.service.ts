@@ -18,6 +18,7 @@ import type {
 	IRegisterCustomerPayload,
 	IRequestUser,
 	IResetPasswordPayload,
+	IVerifyEmailPayload,
 } from "./auth.interface";
 import { redisClient } from "../../lib/redis";
 import crypto from "crypto";
@@ -36,6 +37,13 @@ type TStatusUser = {
 	status: UserStatus;
 	isDeleted: boolean;
 };
+
+const OTP_EXPIRATION_SECONDS = 5 * 60;
+const MAX_OTP_ATTEMPTS = 5;
+
+const otpKey = (email: string) => `customer-registration-otp:${email}`;
+const dataKey = (email: string) => `customer-registration-data:${email}`;
+const attemptsKey = (email: string) => `customer-registration-attempts:${email}`;
 
 const generateTokens = (user: TTokenUser) => {
 	const jwtPayload = {
@@ -70,7 +78,7 @@ const assertUserIsActive = (user: TStatusUser) => {
 };
 
 const registerCustomer = async (payload: IRegisterCustomerPayload) => {
-	const { name, password, phone, address } = payload;
+	const { name, password, phone } = payload;
 	const email = payload.email.trim().toLowerCase();
 
 	const existingUser = await prisma.user.findUnique({
@@ -86,25 +94,145 @@ const registerCustomer = async (payload: IRegisterCustomerPayload) => {
 	}
 
 	const hashedPassword = await bcrypt.hash(password, config.bcrypt_salt_rounds);
+	const otpValue = crypto.randomInt(100000, 1000000).toString();
 
-	// Nested create runs inside a single DB transaction (user + customer profile)
-	const createdUser = await prisma.user.create({
-		data: {
+	const expiry = {
+		expiration: { type: "EX" as const, value: OTP_EXPIRATION_SECONDS },
+	};
+
+	await Promise.all([
+		redisClient.set(otpKey(email), otpValue, expiry),
+		redisClient.set(
+			dataKey(email),
+			JSON.stringify({ name, email, password: hashedPassword, phone }),
+			expiry,
+		),
+		redisClient.del(attemptsKey(email)),
+	]);
+
+	try {
+		const templatePath = path.join(
+			process.cwd(),
+			"src/app/templates/registration-otp.ejs",
+		);
+
+		const templateData = {
 			name,
 			email,
-			phone,
-			password: hashedPassword,
+			otpValue,
+			expirationMinutes: Math.ceil(OTP_EXPIRATION_SECONDS / 60),
+		};
+
+		const html = await ejs.renderFile(templatePath, templateData);
+
+		await transporter.sendMail({
+			from: config.email_sender,
+			to: email,
+			subject: "Email Verification",
+			html,
+		});
+	} catch (error) {
+		await redisClient.del([otpKey(email), dataKey(email)]);
+		throw new AppError(
+			httpStatus.BAD_GATEWAY,
+			"Failed to send verification email. Please try again.",
+		);
+	}
+
+	return { email, expiresInSeconds: OTP_EXPIRATION_SECONDS };
+};
+
+const verifyCustomerEmail = async (payload: IVerifyEmailPayload) => {
+	const { otp } = payload;
+	const email = payload.email.trim().toLowerCase();
+
+	const storedOtp = await redisClient.get(otpKey(email));
+
+	if (!storedOtp) {
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"OTP expired or not found. Please register again.",
+		);
+	}
+
+	// Limit guesses per OTP
+	const attempts = await redisClient.incr(attemptsKey(email));
+	if (attempts === 1) {
+		await redisClient.expire(attemptsKey(email), OTP_EXPIRATION_SECONDS);
+	}
+	if (attempts > MAX_OTP_ATTEMPTS) {
+		await redisClient.del([otpKey(email), dataKey(email), attemptsKey(email)]);
+		throw new AppError(
+			httpStatus.TOO_MANY_REQUESTS,
+			"Too many wrong attempts. Please register again.",
+		);
+	}
+
+	if (storedOtp !== otp) {
+		throw new AppError(httpStatus.BAD_REQUEST, "Invalid OTP");
+	}
+
+	const rawData = await redisClient.get(dataKey(email));
+
+	if (!rawData) {
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Registration data expired. Please register again.",
+		);
+	}
+
+	const data = JSON.parse(rawData) as {
+		name: string;
+		email: string;
+		password: string;
+		phone?: string;
+	};
+
+	// If the email got taken meanwhile, Prisma P2002 -> 409 via the error handler
+	const createdUser = await prisma.user.create({
+		data: {
+			name: data.name,
+			email: data.email,
+			phone: data.phone,
+			password: data.password,
 			role: Role.CUSTOMER,
 			status: UserStatus.ACTIVE,
 			authProvider: AuthProvider.CREDENTIAL,
-			emailVerified: false,
-			customer: { create: {
-				address
-			} },
+			emailVerified: true,
+			customer: { create: {} },
 		},
 		omit: { password: true },
 		include: { customer: true },
 	});
+
+	await redisClient.del([otpKey(email), dataKey(email), attemptsKey(email)]);
+
+	// Account already exists, so a mail failure must not fail the request
+	try {
+		const templatePath = path.join(
+			process.cwd(),
+			"src/app/templates/welcome-email.ejs",
+		);
+
+		const html = await ejs.renderFile(templatePath, {
+			name: createdUser.name,
+			loginUrl: `${config.frontend_url}/login`,
+		});
+
+		await transporter.sendMail({
+			from: config.email_sender,
+			to: email,
+			subject: "Welcome to Courier & Logistics",
+			html,
+		});
+		
+
+	} catch (error) {
+		console.error(
+			"Failed to send welcome email:",
+			(error as Error).message,
+		);
+	}
 
 	const { customer, ...user } = createdUser;
 	const tokens = generateTokens(user);
@@ -227,6 +355,28 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 				customer: { create: {} },
 			},
 		});
+
+		try {
+			const templatePath = path.join(
+				process.cwd(),
+				"src/app/templates/welcome-email.ejs",
+			);
+
+			const html = await ejs.renderFile(templatePath, {
+				name: user.name,
+				loginUrl: `${config.frontend_url}/login`,
+			});
+
+			await transporter.sendMail({
+				from: config.email_sender,
+				to: email,
+				subject: "Welcome to Courier & Logistics",
+				html,
+			});
+		} catch (error) {
+			console.error("Failed to send welcome email:", error);
+		}
+		
 	} else {
 		assertUserIsActive(user);
 
@@ -387,6 +537,7 @@ const resetPassword = async(payload: IResetPasswordPayload)=>{
 
 export const AuthService = {
 	registerCustomer,
+	verifyCustomerEmail,
 	loginUser,
 	getMe,
 	refreshToken,
