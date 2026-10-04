@@ -61,4 +61,7 @@ export default {
 	smtp_host: process.env.SMTP_HOST as string,
 	smtp_port: Number(process.env.SMTP_PORT ?? 587),
 	redis_url: process.env.REDIS_URL ?? "redis://localhost:6379",
+	coudinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+    coudinary_api_key: process.env.CLOUDINARY_API_KEY!,
+    coudinary_api_secret: process.env.CLOUDINARY_API_SECRET!
 };
