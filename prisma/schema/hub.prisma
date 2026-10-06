@@ -1,0 +1,35 @@
+model Hub {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  code      String   @unique
+  city      String
+  address   String
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  zones             Zone[]
+  couriers          Courier[]
+  outgoingTransfers HubTransfer[] @relation("FromHub")
+  incomingTransfers HubTransfer[] @relation("ToHub")
+
+  @@index([city])
+  @@map("hubs")
+}
+
+model Zone {
+  id        String   @id @default(uuid())
+  hubId     String
+  name      String
+  areas     String[]
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  hub Hub @relation(fields: [hubId], references: [id], onDelete: Cascade)
+
+  @@unique([hubId, name])
+  @@index([hubId])
+  @@map("zones")
+}

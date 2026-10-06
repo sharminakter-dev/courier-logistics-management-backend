@@ -20,6 +20,9 @@ model User {
   customer Customer?
   courier  Courier?
 
+  notifications Notification[]
+
   @@index([role, status])
+
   @@map("users")
 }

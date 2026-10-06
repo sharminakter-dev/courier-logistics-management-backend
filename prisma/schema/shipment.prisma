@@ -24,11 +24,15 @@ model Shipment {
   deliveredAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  deliveryAttempts Int              @default(0)
 
   customer       Customer        @relation(fields: [customerId], references: [id])
   courier        Courier?        @relation(fields: [courierId], references: [id], onDelete: SetNull)
   payment        Payment?
   trackingEvents TrackingEvent[]
+
+  hubTransfers     HubTransfer[]
+  earning          CourierEarning?
 
   @@index([customerId, createdAt])
   @@index([courierId, status])

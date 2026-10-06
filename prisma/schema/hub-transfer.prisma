@@ -1,0 +1,21 @@
+model HubTransfer {
+  id             String         @id @default(uuid())
+  shipmentId     String
+  fromHubId      String
+  toHubId        String
+  status         TransferStatus @default(IN_TRANSIT)
+  note           String?
+  dispatchedById String?
+  receivedById   String?
+  dispatchedAt   DateTime       @default(now())
+  receivedAt     DateTime?
+
+  shipment Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  fromHub  Hub      @relation("FromHub", fields: [fromHubId], references: [id])
+  toHub    Hub      @relation("ToHub", fields: [toHubId], references: [id])
+
+  @@index([shipmentId])
+  @@index([fromHubId, status])
+  @@index([toHubId, status])
+  @@map("hub_transfers")
+}

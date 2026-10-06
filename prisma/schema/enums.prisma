@@ -52,3 +52,13 @@ enum PaymentStatus {
   CANCELLED
   REFUNDED
 }
+
+enum TransferStatus {
+  IN_TRANSIT
+  RECEIVED
+}
+
+enum EarningStatus {
+  PENDING
+  PAID
+}

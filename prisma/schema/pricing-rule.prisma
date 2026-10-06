@@ -1,0 +1,12 @@
+model PricingRule {
+  id                String   @id @default(uuid())
+  sameCityBase      Decimal  @default(60) @db.Decimal(10, 2)
+  interCityBase     Decimal  @default(100) @db.Decimal(10, 2)
+  freeWeightKg      Decimal  @default(1) @db.Decimal(6, 2)
+  perExtraKg        Decimal  @default(25) @db.Decimal(10, 2)
+  expressMultiplier Decimal  @default(1.5) @db.Decimal(4, 2)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+
+  @@map("pricing_rules")
+}

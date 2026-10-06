@@ -9,8 +9,14 @@ model Courier {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   shipments Shipment[]
 
+  hubId     String?
+  hub       Hub?             @relation(fields: [hubId], references: [id], onDelete: SetNull)
+
+  earnings  CourierEarning[]
+
   // Frequently filtered when assigning a courier to a pickup
   @@index([isAvailable])
+  @@index([hubId])
   
   @@map("couriers")
 }
