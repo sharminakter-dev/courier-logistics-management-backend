@@ -24,6 +24,11 @@ import {
 	isSameCity,
 } from "./shipment.utils";
 import { buildMeta, getPagination } from "../../utils/pagination";
+import { cache } from "../../lib/cache";
+import { calculateEarning } from "../earning/earning.utils";
+import { notifyUser } from "../notification/notification.utils";
+import { PricingService } from "../pricing/pricing.service";
+import { MAX_DELIVERY_ATTEMPTS } from "./shipment.utils";
 
 const getBkashHeaders = async () => {
 	const bkashIdToken = await getBkashIdToken();
@@ -55,11 +60,16 @@ const createShipment = async (
 
 	const { pickup, receiver, weightKg, deliveryType } = payload;
 
-	const price = calculatePrice({
-		weightKg,
-		deliveryType,
-		sameCity: isSameCity(pickup.city, receiver.city),
-	});
+	const pricingRule = await PricingService.getPricingNumbers();
+
+	const price = calculatePrice(
+		{
+			weightKg,
+			deliveryType,
+			sameCity: isSameCity(pickup.city, receiver.city),
+		},
+		pricingRule,
+	);
 	const trackingNumber = generateTrackingNumber();
 
 	// 1. create the payment at bKash
@@ -185,9 +195,11 @@ const paymentCallback = async (query: Record<string, any>) => {
 		throw new AppError(httpStatus.BAD_REQUEST, "paymentID is missing");
 	}
 
-	const payment = await prisma.payment.findUnique({
+    const payment = await prisma.payment.findUnique({
 		where: { bkashPaymentId: paymentID },
-		include: { shipment: true },
+		include: {
+			shipment: { include: { customer: { select: { userId: true } } } },
+		},
 	});
 
 	if (!payment) {
@@ -269,6 +281,13 @@ const paymentCallback = async (query: Record<string, any>) => {
 				status: ShipmentStatus.PICKUP_REQUESTED,
 				note: "Payment received. Pickup requested.",
 			},
+		});
+
+        await notifyUser(tx, {
+			userId: payment.shipment.customer.userId,
+			title: "Payment received",
+			message: `Payment for shipment ${payment.shipment.trackingNumber} received. Pickup requested.`,
+			shipmentId: payment.shipmentId,
 		});
 	});
 
@@ -378,34 +397,45 @@ const cancelShipment = async (
 			},
 		});
 
+        await notifyUser(tx, {
+			userId: shipment.customer.userId,
+			title: "Shipment cancelled",
+			message: refundResult
+				? `Shipment ${shipment.trackingNumber} was cancelled and your payment was refunded.`
+				: `Shipment ${shipment.trackingNumber} was cancelled.`,
+			shipmentId: shipment.id,
+		});
+
 		return updatedShipment;
 	});
 };
 
 // public: only city names and status history, no personal data
 const trackShipment = async (trackingNumber: string) => {
-	const shipment = await prisma.shipment.findUnique({
-		where: { trackingNumber },
-		select: {
-			trackingNumber: true,
-			status: true,
-			deliveryType: true,
-			pickupCity: true,
-			receiverCity: true,
-			createdAt: true,
-			deliveredAt: true,
-			trackingEvents: {
-				select: { status: true, note: true, location: true, createdAt: true },
-				orderBy: { createdAt: "asc" },
+	return cache.getOrSet(`tracking:${trackingNumber}`, 30, async () => {
+		const shipment = await prisma.shipment.findUnique({
+			where: { trackingNumber },
+			select: {
+				trackingNumber: true,
+				status: true,
+				deliveryType: true,
+				pickupCity: true,
+				receiverCity: true,
+				createdAt: true,
+				deliveredAt: true,
+				trackingEvents: {
+					select: { status: true, note: true, location: true, createdAt: true },
+					orderBy: { createdAt: "asc" },
+				},
 			},
-		},
+		});
+
+		if (!shipment) {
+			throw new AppError(httpStatus.NOT_FOUND, "Shipment not found");
+		}
+
+		return shipment;
 	});
-
-	if (!shipment) {
-		throw new AppError(httpStatus.NOT_FOUND, "Shipment not found");
-	}
-
-	return shipment;
 };
 
 const getMyShipments = async (
@@ -515,6 +545,7 @@ const assignCourier = async (
 
 	const shipment = await prisma.shipment.findUnique({
 		where: { id: shipmentId },
+		include: { customer: { select: { userId: true } } },
 	});
 
 	if (!shipment) {
@@ -533,7 +564,7 @@ const assignCourier = async (
 		);
 	}
 
-	return prisma.$transaction(async (tx) => {
+	const result = await prisma.$transaction(async (tx) => {
 		const updated = await tx.shipment.update({
 			where: { id: shipmentId },
 			data: { courierId: courier.id, status: ShipmentStatus.COURIER_ASSIGNED },
@@ -547,8 +578,26 @@ const assignCourier = async (
 			},
 		});
 
+		await notifyUser(tx, {
+			userId: courier.userId,
+			title: "New pickup assigned",
+			message: `Shipment ${shipment.trackingNumber} has been assigned to you.`,
+			shipmentId,
+		});
+
+		await notifyUser(tx, {
+			userId: shipment.customer.userId,
+			title: "Courier assigned",
+			message: `${courier.user.name} will pick up your shipment ${shipment.trackingNumber}.`,
+			shipmentId,
+		});
+
 		return updated;
 	});
+
+	await cache.del(`tracking:${shipment.trackingNumber}`);
+
+	return result;
 };
 
 const updateShipmentStatus = async (
@@ -560,7 +609,10 @@ const updateShipmentStatus = async (
 
 	const shipment = await prisma.shipment.findUnique({
 		where: { id: shipmentId },
-		include: { courier: { select: { userId: true } } },
+		include: {
+			courier: { select: { userId: true } },
+			customer: { select: { userId: true } },
+		},
 	});
 
 	if (!shipment) {
@@ -585,19 +637,34 @@ const updateShipmentStatus = async (
 		);
 	}
 
-	return prisma.$transaction(async (tx) => {
+	// failed delivery rule: after 3 failed attempts the parcel must go back
+	if (
+		shipment.status === ShipmentStatus.DELIVERY_FAILED &&
+		nextStatus === ShipmentStatus.OUT_FOR_DELIVERY &&
+		shipment.deliveryAttempts >= MAX_DELIVERY_ATTEMPTS
+	) {
+		throw new AppError(
+			httpStatus.BAD_REQUEST,
+			"Maximum delivery attempts reached. Please return the shipment to the sender.",
+		);
+	}
+
+	const result = await prisma.$transaction(async (tx) => {
 		// "where status = old status" stops two people updating at the same time
-		const result = await tx.shipment.updateMany({
+		const updated = await tx.shipment.updateMany({
 			where: { id: shipmentId, status: shipment.status },
 			data: {
 				status: nextStatus,
 				...(nextStatus === ShipmentStatus.DELIVERED
 					? { deliveredAt: new Date() }
 					: {}),
+				...(nextStatus === ShipmentStatus.DELIVERY_FAILED
+					? { deliveryAttempts: { increment: 1 } }
+					: {}),
 			},
 		});
 
-		if (result.count === 0) {
+		if (updated.count === 0) {
 			throw new AppError(
 				httpStatus.CONFLICT,
 				"Shipment was updated by someone else. Please refresh.",
@@ -614,11 +681,33 @@ const updateShipmentStatus = async (
 			},
 		});
 
+		// courier earns money when the parcel is delivered (unique per shipment)
+		if (nextStatus === ShipmentStatus.DELIVERED && shipment.courierId) {
+			await tx.courierEarning.create({
+				data: {
+					courierId: shipment.courierId,
+					shipmentId,
+					amount: calculateEarning(Number(shipment.price)),
+				},
+			});
+		}
+
+		await notifyUser(tx, {
+			userId: shipment.customer.userId,
+			title: "Shipment update",
+			message: `Your shipment ${shipment.trackingNumber} is now ${nextStatus.replace(/_/g, " ").toLowerCase()}.`,
+			shipmentId,
+		});
+
 		return tx.shipment.findUnique({
 			where: { id: shipmentId },
 			include: { trackingEvents: { orderBy: { createdAt: "desc" } } },
 		});
 	});
+
+	await cache.del(`tracking:${shipment.trackingNumber}`);
+
+	return result;
 };
 
 export const ShipmentService = {

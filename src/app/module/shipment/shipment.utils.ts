@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { DeliveryType, ShipmentStatus } from "../../../generated/prisma/enums";
+import { IPricingNumbers } from "../pricing/pricing.interface";
 
 export const generateTrackingNumber = () => {
 	const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
@@ -10,21 +11,27 @@ export const generateTrackingNumber = () => {
 export const isSameCity = (a: string, b: string) =>
 	a.trim().toLowerCase() === b.trim().toLowerCase();
 
-// Price in BDT: base (same city 60, other city 100) + 25 per extra kg after 1 kg
-// Express = 1.5x
-export const calculatePrice = (input: {
-	weightKg: number;
-	deliveryType: DeliveryType;
-	sameCity: boolean;
-}) => {
-	const base = input.sameCity ? 60 : 100;
-	const extraKg = Math.max(0, Math.ceil(input.weightKg - 1));
-	const subtotal = base + extraKg * 25;
-	const total =
-		input.deliveryType === DeliveryType.EXPRESS ? subtotal * 1.5 : subtotal;
+export const MAX_DELIVERY_ATTEMPTS = 3;
 
-	return Math.round(total * 100) / 100;
+export const getPriceBreakdown = (
+	input: { weightKg: number; deliveryType: DeliveryType; sameCity: boolean },
+	rule: IPricingNumbers,
+) => {
+	const base = input.sameCity ? rule.sameCityBase : rule.interCityBase;
+	const extraKg = Math.max(0, Math.ceil(input.weightKg - rule.freeWeightKg));
+	const extraCharge = extraKg * rule.perExtraKg;
+	const subtotal = base + extraCharge;
+	const multiplier =
+		input.deliveryType === DeliveryType.EXPRESS ? rule.expressMultiplier : 1;
+	const total = Math.round(subtotal * multiplier * 100) / 100;
+
+	return { base, extraKg, extraCharge, subtotal, multiplier, total };
 };
+
+export const calculatePrice = (
+	input: { weightKg: number; deliveryType: DeliveryType; sameCity: boolean },
+	rule: IPricingNumbers,
+) => getPriceBreakdown(input, rule).total;
 
 // current status -> statuses it can move to
 export const ALLOWED_TRANSITIONS: Record<ShipmentStatus, ShipmentStatus[]> = {
