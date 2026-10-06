@@ -23,7 +23,7 @@ import {
 	generateTrackingNumber,
 	isSameCity,
 } from "./shipment.utils";
-import { getPagination } from "../../utils/pagination";
+import { buildMeta, getPagination } from "../../utils/pagination";
 
 const getBkashHeaders = async () => {
 	const bkashIdToken = await getBkashIdToken();
@@ -464,7 +464,7 @@ const getAllShipments = async (query: Record<string, any>) => {
 
 	return {
 		data,
-		meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+		meta: buildMeta(page, limit, total),
 	};
 };
 
