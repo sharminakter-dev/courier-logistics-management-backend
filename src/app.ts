@@ -11,6 +11,7 @@ import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
 import { notFound } from "./app/middleware/notFound";
 import { AuthRoutes } from "./app/module/auth/auth.route";
 import { UserRoutes } from "./app/module/user/user.routes";
+import { ShipmentRoutes } from "./app/module/shipment/shipment.route";
 
 const app: Application = express();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/user", UserRoutes);
+app.use("/api/v1/shipments", ShipmentRoutes);
 
 app.get("/", (_req: Request, res: Response) => {
 	res.status(httpStatus.OK).json({

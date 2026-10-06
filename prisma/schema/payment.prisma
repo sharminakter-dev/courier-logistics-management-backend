@@ -1,0 +1,24 @@
+model Payment {
+  id                    String        @id @default(uuid())
+  shipmentId            String        @unique
+  amount                Decimal       @db.Decimal(10, 2)
+  status                PaymentStatus @default(PENDING)
+  bkashPaymentId        String?       @unique
+  bkashTrxId            String?       @unique
+  payerReference        String?
+  paidAt                DateTime?
+  gatewayResponse       Json?
+
+  refundTrxId   String?   @unique
+  refundAmount  Decimal?  @db.Decimal(10, 2)
+  refundReason  String?
+  refundedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  shipment Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@map("payments")
+}
