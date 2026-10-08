@@ -2,7 +2,7 @@
 
 REST API for a courier and logistics platform. Customers create and pay for shipments, admins assign couriers and move parcels between hubs, and couriers pick up and deliver them. Every shipment has a full tracking timeline.
 
-**Live API:** `<deployed-url>` | **Frontend:** `<frontend-url>`
+**Live API:** `https://courier-logistics-management-backen-six.vercel.app/` | **Frontend:** `<frontend-url>`
 
 ## Features
 
