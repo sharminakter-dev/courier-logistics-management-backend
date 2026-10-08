@@ -1,0 +1,1482 @@
+{
+  "info": {
+    "_postman_id": "46c72241-4fb7-4445-9e20-3581159de24a",
+    "name": "Courier Logistics Management Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "36312016"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Google Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk0M2EzYTVkN2Q5MTk2MjVhNDU0ZTQ4OWI3NWMyOWFkYWI1N2FjYmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMDQ1MTA4MzM0MDEtN2cwNWtvOXVmbGQwMmtqOTM2M3FyMXE5cDdwcmF0azUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMDQ1MTA4MzM0MDEtN2cwNWtvOXVmbGQwMmtqOTM2M3FyMXE5cDdwcmF0azUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDY2MDEzNTQ0NzgxMTA5NjY3MTQiLCJlbWFpbCI6ImFub29zaGFhc2VoYXJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTc5MTQxOTI4NSwibmFtZSI6IkFub29zaGEgU2VoYXIiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS09oV3pINHM2RmZiNktFaGtqMElNb1ZBMXRPZWd4bUlFZ1VVWHdKQ2pfb0Q1eXZBPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkFub29zaGEiLCJmYW1pbHlfbmFtZSI6IlNlaGFyIiwiaWF0IjoxNzkxNDE5NTg1LCJleHAiOjE3OTE0MjMxODUsImp0aSI6IjMwNDkxMDNiN2Q5ODRhZjU2ZWYwN2ZlNjg0ZmM3YmZiNzczNjUxZGQifQ.h6EA6wExOSpV9MZPHil841DgFI1bve4JoJmicna0mZTe6l_k4R0nKCPqLMlpgT0rxZd2yZM70uYMxs8KDTZBCNdH7YJsdNCPp3w-BAbKl3PQs9oW4lLgKGQ5igP9QOiuvpWAbPLhI9r5iU5j8sxVocDQSdKUnNhjh7kAUgvxdARc21iajlhbQ88QYPS-cgNsDSTz0J_cR1MqURrRrMXTJ2MFzD6jvAF-e2yS8vms0JiuLGmvuNYTnn9h6-KSXqNLRlqTDIXnxOH3-3M4ZLyC8kvWhNXX7e9DL2pdsZjo19Tk9JMTRGNymY1Pfgh2LFv8olPrjbtFV8YUK9ZRjbWqqw\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/google",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "google"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Email Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"superadmin@courier.com\",\r\n\t\"password\": \"SuperAdmin@12345\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Anoosha\",\r\n\t\"email\": \"anooshaasehar@gmail.com\",\r\n\t\"password\": \"12345_uU\",\r\n\t\"phone\": \"123456789\",\r\n    \"address\":\"abc\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"token\":\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/refresh-token",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"anooshaasehar@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/forgot-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"anooshaasehar@gmail.com\",\r\n    \"newPassword\":\"12345_uA\",\r\n    \"otp\": \"106255\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/reset-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"anooshaasehar@gmail.com\",\r\n\t\"otp\": \"633213\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/verify-email",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "verify-email"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Image upload",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "profileImage",
+                  "type": "file",
+                  "src": [
+                    "/D:/Downloads/download.jpg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/user/profile-image",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile-image"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Shipment",
+      "item": [
+        {
+          "name": "Create Shipment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pickup\": {\r\n    \"name\": \"Sender 4\",\r\n    \"phone\": \"01712345678\",\r\n    \"address\": \"Chittagong\",\r\n    \"city\": \"Chittagong\"\r\n  },\r\n  \"receiver\": {\r\n    \"name\": \"Receiver 4\",\r\n    \"phone\": \"01812345678\",\r\n    \"address\": \"Dhaka\",\r\n    \"city\": \"Sylhet\"\r\n  },\r\n  \"weightKg\": 2.5,\r\n  \"deliveryType\": \"STANDARD\",\r\n  \"parcelDescription\": \"Books and documents\",\r\n  \"pickupScheduledAt\": \"2026-10-10T10:00:00.000Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/shipments/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "shipments",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pay Shipment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/shipments/622d70b5-4709-4207-8465-8c5b8d0c0b45/pay",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "shipments",
+                "622d70b5-4709-4207-8465-8c5b8d0c0b45",
+                "pay"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Shipment",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"reason\": \"Changed my mind\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/shipments/88810561-15df-441e-bdaf-36059a0316f7/cancel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "shipments",
+                "88810561-15df-441e-bdaf-36059a0316f7",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Track Shipment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/shipments/track/CLG-20261008-BABCB5A8",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "shipments",
+                "track",
+                "CLG-20261008-BABCB5A8"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Shipments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/shipments/my-shipments?page=1&limit=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "shipments",
+                "my-shipments"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Shipment By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/shipments/88810561-15df-441e-bdaf-36059a0316f7",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "shipments",
+                "88810561-15df-441e-bdaf-36059a0316f7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Courier",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"courierId\": \"11a85506-66a6-4c9c-bec7-89ab5f5d68ec\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/shipments/caafc044-fbb3-4d2e-83c7-e57bbd6e21fb/assign-courier",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "shipments",
+                "caafc044-fbb3-4d2e-83c7-e57bbd6e21fb",
+                "assign-courier"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Shipment Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\":\"PICKED_UP\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/shipments/caafc044-fbb3-4d2e-83c7-e57bbd6e21fb/status",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "shipments",
+                "caafc044-fbb3-4d2e-83c7-e57bbd6e21fb",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Hubs",
+      "item": [
+        {
+          "name": "Create Hub",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"XYZ\",\r\n  \"code\": \"XYZ-01\",\r\n  \"city\": \"Chittagon\",\r\n  \"address\": \"Chittagon\",\r\n  \"phone\": \"01712345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hubs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hubs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Hub Listings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hubs",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hubs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Hub with its zones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hubs/a4d24a74-16ee-4470-af56-769a2500a281",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hubs",
+                "a4d24a74-16ee-4470-af56-769a2500a281"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update hub",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isActive\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hubs/a4d24a74-16ee-4470-af56-769a2500a281",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hubs",
+                "a4d24a74-16ee-4470-af56-769a2500a281"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Hub",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hubs/9cccb4c4-1491-4a91-a868-6ff885b7de3a",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hubs",
+                "9cccb4c4-1491-4a91-a868-6ff885b7de3a"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create zone",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"name\": \"Kolatoli Zone\", \r\n    \"areas\": [\"Kolatoli\", \"Laboni\", \"Sugandha\"] \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hubs/3cb995e6-7321-402b-b8d8-b6e231bae568/zones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hubs",
+                "3cb995e6-7321-402b-b8d8-b6e231bae568",
+                "zones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Zones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hubs/3cb995e6-7321-402b-b8d8-b6e231bae568/zones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hubs",
+                "3cb995e6-7321-402b-b8d8-b6e231bae568",
+                "zones"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Zones",
+      "item": [
+        {
+          "name": "Zone",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isActive\":false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/zones/5b2f9af3-7d35-483d-95ad-5cfc6a73610b",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "zones",
+                "5b2f9af3-7d35-483d-95ad-5cfc6a73610b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Zone",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/zones/5b2f9af3-7d35-483d-95ad-5cfc6a73610b",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "zones",
+                "5b2f9af3-7d35-483d-95ad-5cfc6a73610b"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Hub Transfers",
+      "item": [
+        {
+          "name": "dispatch from hub",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"shipmentId\": \"a7c8437d-c31f-40ab-ba71-4b45f0305d33\", \r\n    \"fromHubId\": \"3d0dff96-6284-4325-b4c6-e2f71636c1d2\", \r\n    \"toHubId\": \"b6c82814-a430-4b44-b30e-bca336642aa6\", \r\n    \"note\": \"Truck T-12\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hub-transfers",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hub-transfers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Received",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"note\": \"Received in good condition\" \r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hub-transfers/8d549383-1d30-4d5b-8c60-f68065bd772a/receive",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hub-transfers",
+                "8d549383-1d30-4d5b-8c60-f68065bd772a",
+                "receive"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all Transfer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hub-transfers",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hub-transfers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Transfer With Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/hub-transfers/8d549383-1d30-4d5b-8c60-f68065bd772a",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "hub-transfers",
+                "8d549383-1d30-4d5b-8c60-f68065bd772a"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Couriers",
+      "item": [
+        {
+          "name": "Create Courier",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"name\": \"Courier 3\", \r\n    \"email\": \"courier3@example.com\", \r\n    \"password\": \"Courier@123\", \r\n    \"phone\": \"01712345678\", \r\n    \"vehicleType\": \"MOTORBIKE\", \r\n    \"hubId\": \"80bf22bb-3e06-474f-8024-c5ac911136e1\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/couriers",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "couriers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Couriers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/couriers",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "couriers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ge me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/couriers/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "couriers",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Shipments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/couriers/me/shipments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "couriers",
+                "me",
+                "shipments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Availablity",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"isAvailable\": false \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/couriers/me/availability",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "couriers",
+                "me",
+                "availability"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Courier",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/couriers/d637eb11-162c-4ca6-b0e1-535f73340517",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "couriers",
+                "d637eb11-162c-4ca6-b0e1-535f73340517"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Courier",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"vehicleType\": \"BICYCLE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/couriers/d637eb11-162c-4ca6-b0e1-535f73340517",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "couriers",
+                "d637eb11-162c-4ca6-b0e1-535f73340517"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pricing",
+      "item": [
+        {
+          "name": "Get Pricing Rule",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/pricing",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "pricing"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pricing Calculator",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"pickupCity\": \"Cox's Bazar\", \r\n    \"receiverCity\": \"Chittagong\", \r\n    \"weightKg\": 2.5, \r\n    \"deliveryType\": \"EXPRESS\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/pricing/quote",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "pricing",
+                "quote"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Price",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"perExtraKg\": 30\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/pricing",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "pricing"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Earnings",
+      "item": [
+        {
+          "name": "Get My Earnings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/earnings/my",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "earnings",
+                "my"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all Earnings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/earnings",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "earnings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pay Pending Earnings",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"courierId\": \"3f8cfcb3-de90-42d5-8da1-088010ba0510\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/earnings/payout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "earnings",
+                "payout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "My notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/notifications",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "notifications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unread Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/notifications/unread-count",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "unread-count"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark All Read Notifications",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"success\": true, \"message\": \"All notifications marked as read\", \"data\": { \"updated\": 3 } }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/notifications/read-all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "read-all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark One Notification",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/notifications/fbb6fa9b-f088-48de-bf05-3303044b4105/read",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "fbb6fa9b-f088-48de-bf05-3303044b4105",
+                "read"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/analytics/overview",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "overview"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Revenue",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/analytics/shipments-trend?days=30",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "shipments-trend"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top Courier",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/analytics/top-couriers?limit=5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "top-couriers"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Vercel Deployment",
+      "item": [
+        {
+          "name": "Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://courier-logistics-management-backen-six.vercel.app/",
+              "protocol": "https",
+              "host": [
+                "courier-logistics-management-backen-six",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Google Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk0M2EzYTVkN2Q5MTk2MjVhNDU0ZTQ4OWI3NWMyOWFkYWI1N2FjYmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMDQ1MTA4MzM0MDEtN2cwNWtvOXVmbGQwMmtqOTM2M3FyMXE5cDdwcmF0azUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMDQ1MTA4MzM0MDEtN2cwNWtvOXVmbGQwMmtqOTM2M3FyMXE5cDdwcmF0azUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTEwNTk5MTI1NDU1OTA1NzgxNjkiLCJlbWFpbCI6InNoYXJtaW5ha3RlcjA0MTFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTc5MTQxNzkzMSwibmFtZSI6IlNoYXJtaW4gQWt0ZXIiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS0Q3NDczQWdrLU1WSVA2akwtMWp1SV9qLWU1WXhyTVJhTzBISTVEWkREejFhUjczSG90dz1zOTYtYyIsImdpdmVuX25hbWUiOiJTaGFybWluIiwiZmFtaWx5X25hbWUiOiJBa3RlciIsImlhdCI6MTc5MTQxODIzMSwiZXhwIjoxNzkxNDIxODMxLCJqdGkiOiJlNzA3NzA2NTUzN2M0ODE1MjgwZWU0YzI4MWQ3OGQ3ODE3NmQ3MDc4In0.Y1CKZXs6qAA4qL-S3mCkZ4LWhrZ41_H2a7xJ-sglDD3pH5tqlypQismdSvgzGvpmd7UpX1FSf4q-DEC-D2r5IGu0h5vZXGgaqrep50Lpr2F7dl8wTnTLgDpDlqhr37JqgzEx3O8VVijftasAeSA1AWjXsYbmk-LKaJjIdJ9z6IdjcTSI40sSUVoWJOzDsbglnMHORjxsiB4C_47QLY5zAoc08n_AWfcO_TIrNPxM0nD1Rg2MjHDIpwr3ONNIlNCIzUisFZdQ9XtAWZ_pcF5TPdlqOTtdLoFnwVYTgyzkWtV80Mobe18OBvDiEipLc5M0mThKjLM3_YrHJ1vZ478sNA\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://courier-logistics-management-backen-six.vercel.app/api/v1/auth/google",
+              "protocol": "https",
+              "host": [
+                "courier-logistics-management-backen-six",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "google"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
